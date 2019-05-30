@@ -67,9 +67,9 @@ def main():
         raise ValueError(
             "Can't get samples longer than window size: %s" % hparams.n_ctx)
 
-    #if args.model_name == '345M':
+    if args.model_name == '345M':
+        args.only_train_transformer_layers = True
     #    args.memory_saving_gradients = True
-    #    args.only_train_transformer_layers = True
 
     CHECKPOINT_DIR=args.checkpoint_dir
 
