@@ -111,7 +111,7 @@ def main():
             #    opt=tf.train.AdamOptimizer(learning_rate=args.learning_rate),
             #    var_list=train_vars)
             opt = AdafactorOptimizer(learning_rate=args.learning_rate, decay_rate=0.8, beta1=0.0, name="Adafactor")
-            opt_reset = opt.reset()
+            #opt_reset = opt.reset()
             opt_compute = opt.compute_gradients(loss)
             opt_apply = opt.apply_gradients()
             summary_loss = tf.summary.scalar('loss', opt_apply)
