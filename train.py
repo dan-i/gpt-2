@@ -254,13 +254,12 @@ def main():
                 summary_log.add_summary(v_summary, counter)
 
                 avg_loss = (avg_loss[0] * 0.99 + v_loss, avg_loss[1] * 0.99 + 1.0)
-
+                print(lrate)
                 print(
-                    '[{counter} | {time:2.2f}] lr={lr:2.8f} loss={loss:2.2f} avg={avg:2.2f}'
+                    '[{counter} | {time:2.2f}] loss={loss:2.2f} avg={avg:2.2f}'
                     .format(
                         counter=counter,
                         time=time.time() - start_time,
-                        lr=lrate,
                         loss=v_loss,
                         avg=avg_loss[0] / avg_loss[1]))
 
