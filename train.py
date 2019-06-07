@@ -253,7 +253,7 @@ def main():
 
                 avg_loss = (avg_loss[0] * 0.99 + v_loss, avg_loss[1] * 0.99 + 1.0)
                 
-                lrate=opt.opt._learning_rate
+                lrate=opt.opt.adafactor_decay_rate_pow(0.8f)
 
                 print(
                     '[{counter} | {time:2.2f}] lr={lr:2.8f} loss={loss:2.2f} avg={avg:2.2f}'
