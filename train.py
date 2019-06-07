@@ -71,7 +71,7 @@ def main():
 
     if args.model_name == '345M':
         #args.only_train_transformer_layers = True
-        args.memory_saving_gradients = True
+        #args.memory_saving_gradients = True
 
     CHECKPOINT_DIR=args.checkpoint_dir
 
