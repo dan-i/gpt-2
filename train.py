@@ -124,7 +124,7 @@ def main():
             else:
                 opt_grads = tf.gradients(loss, train_vars)
             opt_grads = list(zip(opt_grads, train_vars))
-            opt_apply = opt.apply_gradients(z)
+            opt_apply = opt.apply_gradients(opt_grads)
             summary_loss = tf.summary.scalar('loss', loss)
 
         summary_log = tf.summary.FileWriter(
