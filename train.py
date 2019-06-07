@@ -107,11 +107,11 @@ def main():
         if args.accumulate_gradients > 1:
             if args.memory_saving_gradients:
                 exit("Memory saving gradients are not implemented for gradient accumulation yet.")
-            #opt = AccumulatingOptimizer(
-            #    opt=tf.train.AdamOptimizer(learning_rate=args.learning_rate),
-            #    var_list=train_vars)
-            opt = AdafactorOptimizer(learning_rate=args.learning_rate, decay_rate=0.8, beta1=0.0, name="Adafactor")
-            #opt_reset = opt.reset()
+            opt = AccumulatingOptimizer(
+                #opt=tf.train.AdamOptimizer(learning_rate=args.learning_rate),
+                opt = AdafactorOptimizer(learning_rate=args.learning_rate, decay_rate=0.8, beta1=0.0, name="Adafactor"),
+                var_list=train_vars)
+            opt_reset = opt.reset()
             opt_compute = opt.compute_gradients(loss)
             opt_apply = opt.apply_gradients()
             summary_loss = tf.summary.scalar('loss', opt_apply)
@@ -124,7 +124,7 @@ def main():
             else:
                 opt_grads = tf.gradients(loss, train_vars)
             opt_grads = list(zip(opt_grads, train_vars))
-            opt_apply = opt.apply_gradients(opt_grads)
+            opt_apply = opt.apply_gradients(z)
             summary_loss = tf.summary.scalar('loss', loss)
 
         summary_log = tf.summary.FileWriter(
