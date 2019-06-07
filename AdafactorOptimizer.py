@@ -1,4 +1,6 @@
 # Adafactor from tensor2tensor -------------------------------------------------------------
+import numpy as np
+import tensorflow as tf
 
 class AdafactorOptimizer(tf.train.Optimizer):
     """Optimizer that implements the Adafactor algorithm.
