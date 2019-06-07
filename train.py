@@ -244,24 +244,23 @@ def main():
                 if args.accumulate_gradients > 1:
                     sess.run(opt_reset)
                     for _ in range(args.accumulate_gradients):
-                        sess.run(
-                            opt_compute, feed_dict={context: sample_batch()})
+                        sess.run(opt_compute, feed_dict={context: sample_batch()})
                     (v_loss, v_summary) = sess.run((opt_apply, summary_loss))
                 else:
-                    (_, v_loss, v_summary) = sess.run(
-                        (opt_apply, loss, summary_loss),
-                        feed_dict={context: sample_batch()})
+                    (_, v_loss, v_summary) = sess.run((opt_apply, loss, summary_loss), feed_dict={context: sample_batch()})
 
                 summary_log.add_summary(v_summary, counter)
 
-                avg_loss = (avg_loss[0] * 0.99 + v_loss,
-                            avg_loss[1] * 0.99 + 1.0)
+                avg_loss = (avg_loss[0] * 0.99 + v_loss, avg_loss[1] * 0.99 + 1.0)
+                
+                lrate=sess.run(opt.opt._learning_rate)
 
                 print(
-                    '[{counter} | {time:2.2f}] loss={loss:2.2f} avg={avg:2.2f}'
+                    '[{counter} | {time:2.2f}] lr={lr:2.8f} loss={loss:2.2f} avg={avg:2.2f}'
                     .format(
                         counter=counter,
                         time=time.time() - start_time,
+                        lr=lrate,
                         loss=v_loss,
                         avg=avg_loss[0] / avg_loss[1]))
 
