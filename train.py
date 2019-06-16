@@ -37,7 +37,7 @@ parser.add_argument('--memory_saving_gradients', default=False, action='store_tr
 parser.add_argument('--only_train_transformer_layers', default=False, action='store_true', help='Restrict training to the transformer blocks.')
 parser.add_argument('--optimizer', type=str, default='adafactor', help='Optimizer. <adam|sgd|adafactor>.')
 
-parser.add_argument('--restore_from', type=str, default='latest', help='Either "latest", "fresh", or a path to a checkpoint file')
+parser.add_argument('--restore_from', type=str, default='latest', help='Either "latest", "fresh", "none", or a path to a checkpoint file')
 parser.add_argument('--run_name', type=str, default='run1', help='Run id. Name of subdirectory in checkpoint/ and samples/')
 parser.add_argument('--sample_every', metavar='N', type=int, default=100, help='Generate samples every N steps')
 parser.add_argument('--sample_length', metavar='TOKENS', type=int, default=1023, help='Sample this many tokens')
@@ -150,10 +150,14 @@ def main():
         elif args.restore_from == 'fresh':
             ckpt = tf.train.latest_checkpoint(
                 os.path.join('models', args.model_name))
+        elif args.restore_from == 'none':
+            ckpt = None
         else:
             ckpt = tf.train.latest_checkpoint(args.restore_from)
-        print('Loading checkpoint', ckpt)
-        saver.restore(sess, ckpt)
+            
+        if ckpt != None:
+            print('Loading checkpoint', ckpt)
+            saver.restore(sess, ckpt)
 
         print('Loading dataset...')
         chunks = load_dataset(enc, args.dataset, args.combine)
