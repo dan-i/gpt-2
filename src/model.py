@@ -101,7 +101,7 @@ def attn(x, scope, n_state, *, past, hparams):
             w = softmax(w)
             a = tf.matmul(w, v)
         else:
-            a=blocksparse_attention_impl(q, k, v, heads=hparams.n_head, attn_mode='fixed', local_attn_ctx=128, num_verts=4, vertsize=1, blocksize=32, recompute=True)
+            a=attention.blocksparse_attention_impl(q, k, v, heads=hparams.n_head, attn_mode='fixed', local_attn_ctx=128, num_verts=4, vertsize=1, blocksize=32, recompute=True)
         return a
 
     with tf.variable_scope(scope):
