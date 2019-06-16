@@ -12,7 +12,7 @@ def default_hparams():
         n_embd=1024,
         n_head=16,
         n_layer=24,
-        sparse=True
+        sparse=False
     )
 
 def shape_list(x):
