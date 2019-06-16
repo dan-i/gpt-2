@@ -4,13 +4,15 @@ import attention
 
 from tensorflow.contrib.training import HParams
 
+# default to 345M
 def default_hparams():
     return HParams(
-        n_vocab=0,
+        n_vocab=50257,
         n_ctx=1024,
-        n_embd=768,
-        n_head=12,
-        n_layer=12,
+        n_embd=1024,
+        n_head=16,
+        n_layer=24,
+        sparse=False
     )
 
 def shape_list(x):
@@ -91,13 +93,15 @@ def attn(x, scope, n_state, *, past, hparams):
         return w
 
     def multihead_attn(q, k, v):
-        # q, k, v have shape [batch, heads, sequence, features]
-        w = tf.matmul(q, k, transpose_b=True)
-        w = w * tf.rsqrt(tf.cast(v.shape[-1].value, w.dtype))
-
-        w = mask_attn_weights(w)
-        w = softmax(w)
-        a = tf.matmul(w, v)
+        if hparams.sparse==False:
+            # q, k, v have shape [batch, heads, sequence, features]
+            w = tf.matmul(q, k, transpose_b=True)
+            w = w * tf.rsqrt(tf.cast(v.shape[-1].value, w.dtype))
+            w = mask_attn_weights(w)
+            w = softmax(w)
+            a = tf.matmul(w, v)
+        else:
+            a=blocksparse_attention_impl(q, k, v, heads=1, attn_mode='fixed', local_attn_ctx=128, num_verts=4, vertsize=1, blocksize=32, recompute=True)
         return a
 
     with tf.variable_scope(scope):
