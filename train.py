@@ -266,7 +266,8 @@ def main():
                     #lrate=opt.adafactor_decay_rate_pow(0.8)
 
                 summary_log.add_summary(v_summary, counter)
-
+                summary_log.flush()
+                    
                 avg_loss = (avg_loss[0] * 0.99 + v_loss, avg_loss[1] * 0.99 + 1.0)
                 #print(sess.run(tf.train.get_global_step()))
                 print(
