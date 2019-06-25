@@ -45,7 +45,7 @@ parser.add_argument('--sample_every', metavar='N', type=int, default=100, help='
 parser.add_argument('--sample_length', metavar='TOKENS', type=int, default=1023, help='Sample this many tokens')
 parser.add_argument('--sample_num', metavar='N', type=int, default=1, help='Generate this many samples')
 parser.add_argument('--save_every', metavar='N', type=int, default=1000, help='Write a checkpoint every N steps')
-parser.add_argument('--checkpoint_dir', metavar='PATH', type=str, default='checkpoint', help='Folder Path to write checkpoints')
+parser.add_argument('--log_dir', metavar='PATH', type=str, default='logs', help='Folder Path to write tensorboard logs')
 
 parser.add_argument('--val_dataset', metavar='PATH', type=str, default=None, help='Dataset for validation loss, defaults to --dataset.')
 parser.add_argument('--val_batch_size', metavar='SIZE', type=int, default=2, help='Batch size for validation.')
@@ -134,7 +134,7 @@ def main():
             opt_apply = opt.apply_gradients(opt_grads)
             summary_loss = tf.summary.scalar('loss', loss)
 
-        summary_log = tf.summary.FileWriter(os.path.join('models', args.model_name, args.run_name))
+        summary_log = tf.summary.FileWriter(os.path.join(args.log_dir, args.run_name))
 
         saver = tf.train.Saver(
             var_list=all_vars,
