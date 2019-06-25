@@ -138,8 +138,6 @@ def main():
             opt_apply = opt.apply_gradients(opt_grads)
             summary_loss = tf.summary.scalar('loss', loss)
 
-        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name))
-
         saver = tf.train.Saver(
             var_list=all_vars,
             max_to_keep=5,
@@ -246,6 +244,10 @@ def main():
         avg_loss = (0.0, 0.0)
         start_time = time.time()
 
+        merged = tf.summary.merge_all()
+        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name), sess.graph)
+
+
         try:
             while counter != args.stop_after:
                 if counter % args.save_every == 0:
@@ -266,7 +268,6 @@ def main():
                     #lrate=opt.adafactor_decay_rate_pow(0.8)
 
                 summary_log.add_summary(v_summary, counter)
-                summary_log.flush()
                     
                 avg_loss = (avg_loss[0] * 0.99 + v_loss, avg_loss[1] * 0.99 + 1.0)
                 #print(sess.run(tf.train.get_global_step()))
