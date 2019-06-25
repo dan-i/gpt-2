@@ -134,7 +134,7 @@ def main():
             opt_apply = opt.apply_gradients(opt_grads)
             summary_loss = tf.summary.scalar('loss', loss)
 
-        summary_log = tf.summary.FileWriter(os.path.join(args.log_dir, args.run_name))
+        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name))
 
         saver = tf.train.Saver(
             var_list=all_vars,
