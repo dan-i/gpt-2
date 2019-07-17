@@ -10,6 +10,7 @@ import tensorflow as tf
 import time
 import tqdm
 from tensorflow.core.protobuf import rewriter_config_pb2
+from datetime import datetime
 
 import model, sample, encoder
 from load_dataset import load_dataset, Sampler
@@ -245,7 +246,8 @@ def main():
         start_time = time.time()
 
         merged = tf.summary.merge_all()
-        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name), sess.graph)
+
+        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name,datetime.now().strftime("%Y%m%d-%H%M%S")), sess.graph)
 
 
         try:
