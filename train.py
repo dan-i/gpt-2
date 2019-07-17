@@ -245,9 +245,10 @@ def main():
         avg_loss = (0.0, 0.0)
         start_time = time.time()
 
-        merged = tf.summary.merge_all()
+        summary_lr = tf.summary.scalar('learning_rate', args.learning_rate)
+        summaries = tf.summary.merge([summary_lr, summary_loss])
 
-        summary_log = tf.compat.v1.summary.FileWriter(os.path.join(args.log_dir, args.run_name,datetime.now().strftime("%Y%m%d-%H%M%S")), sess.graph)
+        summary_log = tf.compat.v1.summary.FileWriter( os.path.join(args.log_dir, args.run_name, datetime.now().strftime("%Y%m%d-%H%M%S")) )
 
 
         try:
@@ -263,10 +264,10 @@ def main():
                     sess.run(opt_reset)
                     for _ in range(args.accumulate_gradients):
                         sess.run(opt_compute, feed_dict={context: sample_batch()})
-                    (v_loss, v_summary) = sess.run((opt_apply, summary_loss))
+                    (v_loss, v_summary) = sess.run((opt_apply, summaries))
                     #lrate= tf.to_float(tf.train.get_or_create_global_step()) #opt.opt.adafactor_decay_rate_pow(0.8)
                 else:
-                    (_, v_loss, v_summary) = sess.run((opt_apply, loss, summary_loss), feed_dict={context: sample_batch()})
+                    (_, v_loss, v_summary) = sess.run((opt_apply, loss, summaries), feed_dict={context: sample_batch()})
                     #lrate=opt.adafactor_decay_rate_pow(0.8)
 
                 summary_log.add_summary(v_summary, counter)
