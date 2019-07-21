@@ -9,6 +9,7 @@ import numpy as np
 import tensorflow as tf
 import time
 import tqdm
+import sys
 from tensorflow.core.protobuf import rewriter_config_pb2
 from datetime import datetime
 
@@ -161,6 +162,9 @@ def main():
             ckpt = tf.train.latest_checkpoint(args.restore_from)
             
         if ckpt != None:
+            if !tf.train.checkpoint_exists(ckpt):
+                print('Cant find checkpoint file: '+ckpt)
+                sys.exit()
             print('Loading checkpoint', ckpt)
             saver.restore(sess, ckpt)
 
