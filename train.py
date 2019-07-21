@@ -147,7 +147,12 @@ def main():
         sess.run(tf.global_variables_initializer())
 
         if args.restore_from == 'latest':
-            ckpt = tf.train.latest_checkpoint(os.path.join(CHECKPOINT_DIR, args.run_name))
+            pth=os.path.join(CHECKPOINT_DIR, args.run_name)
+            print('Latest checkpoint file: '+tf.train.latest_checkpoint(pth))
+            if not tf.train.checkpoint_exists(pth):
+                print('Cant find checkpoint file: '+pth)
+                sys.exit()
+            ckpt = tf.train.latest_checkpoint(pth)
             #if ckpt is None: don't allow new model load if checkpoint not present, bug out instead to prevent model reset
             #    # Get fresh GPT weights if new run.
             #    ckpt = tf.train.latest_checkpoint(os.path.join('models', args.model_name))
