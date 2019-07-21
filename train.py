@@ -162,7 +162,7 @@ def main():
             ckpt = tf.train.latest_checkpoint(args.restore_from)
             
         if ckpt != None:
-            if !tf.train.checkpoint_exists(ckpt):
+            if not tf.train.checkpoint_exists(ckpt):
                 print('Cant find checkpoint file: '+ckpt)
                 sys.exit()
             print('Loading checkpoint', ckpt)
