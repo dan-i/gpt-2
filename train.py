@@ -148,7 +148,7 @@ def main():
 
         if args.restore_from == 'latest':
             pth=os.path.join(CHECKPOINT_DIR, args.run_name)
-            print('Latest checkpoint file: '+tf.train.latest_checkpoint(pth))
+            #print('Latest checkpoint file: '+tf.train.latest_checkpoint(pth))
             if not tf.train.checkpoint_exists(pth):
                 print('Cant find checkpoint file: '+pth)
                 sys.exit()
