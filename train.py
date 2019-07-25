@@ -149,12 +149,12 @@ def main():
         if args.restore_from == 'latest':
             pth=os.path.join(CHECKPOINT_DIR, args.run_name)
             #print('Latest checkpoint file: '+tf.train.latest_checkpoint(pth))
-            if not tf.train.checkpoint_exists(pth):
+            ckpt = tf.train.latest_checkpoint(pth)
+            if ckpt == None:
                 print('Cant find checkpoint file: '+pth)
                 sys.exit()
-            ckpt = tf.train.latest_checkpoint(pth)
             #if ckpt is None: don't allow new model load if checkpoint not present, bug out instead to prevent model reset
-            #    # Get fresh GPT weights if new run.
+            #    # Get fresh GPT weights if new run. do not do this, will loose good checkpoints
             #    ckpt = tf.train.latest_checkpoint(os.path.join('models', args.model_name))
         elif args.restore_from == 'fresh':
             ckpt = tf.train.latest_checkpoint(os.path.join('models', args.model_name))
@@ -164,11 +164,6 @@ def main():
             ckpt = tf.train.latest_checkpoint(args.restore_from)
             
         if ckpt != None:
-            print('Latest checkpoint file: '+tf.train.latest_checkpoint(ckpt))
-            if not tf.train.checkpoint_exists(ckpt):
-                print('Cant find checkpoint file: '+ckpt)
-                sys.exit()
-            print('Loading checkpoint', ckpt)
             saver.restore(sess, ckpt)
 
         print('Loading dataset...')
