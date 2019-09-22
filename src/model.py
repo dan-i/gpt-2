@@ -151,7 +151,7 @@ def positions_for(tokens, past_length):
     return expand_tile(past_length + tf.range(nsteps), batch_size)
 
 
-def model(hparams, X, past=None, scope='model', reuse=tf.AUTO_REUSE):
+def model(hparams, X, gradchk=False, past=None, scope='model', reuse=tf.AUTO_REUSE):
     with tf.variable_scope(scope, reuse=reuse):
         results = {}
         batch, sequence = shape_list(X)
@@ -169,7 +169,8 @@ def model(hparams, X, past=None, scope='model', reuse=tf.AUTO_REUSE):
             h, present = block(h, 'h%d' % layer, past=past, hparams=hparams)
             #if layer == 10:  # only add to 10th later
             #    tf.add_to_collection('checkpoints', h)
-            tf.add_to_collection('checkpoints', h)  # add gradient checkpointing to every layer
+            if gradchk==True:
+                tf.add_to_collection('checkpoints', h)  # add gradient checkpointing to every layer
             presents.append(present)
         results['present'] = tf.stack(presents, axis=1)
         h = norm(h, 'ln_f')
