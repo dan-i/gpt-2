@@ -169,7 +169,7 @@ def model(hparams, X, past=None, scope='model', reuse=tf.AUTO_REUSE):
             h, present = block(h, 'h%d' % layer, past=past, hparams=hparams)
             #if layer == 10:  # only add to 10th later
             #    tf.add_to_collection('checkpoints', h)
-            #tf.add_to_collection('checkpoints', h)  # add gradient checkpointing to every layer
+            tf.add_to_collection('checkpoints', h)  # add gradient checkpointing to every layer
             presents.append(present)
         results['present'] = tf.stack(presents, axis=1)
         h = norm(h, 'ln_f')
