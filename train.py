@@ -86,6 +86,7 @@ def main():
 
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = False
+    config.gpu_options.per_process_gpu_memory_fraction = 1
     config.graph_options.rewrite_options.layout_optimizer = rewriter_config_pb2.RewriterConfig.OFF
     with tf.Session(config=config) as sess:
         context = tf.placeholder(tf.int32, [args.batch_size, None])
