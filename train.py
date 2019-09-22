@@ -90,14 +90,14 @@ def main():
     config.graph_options.rewrite_options.layout_optimizer = rewriter_config_pb2.RewriterConfig.OFF
     with tf.Session(config=config) as sess:
         context = tf.placeholder(tf.int32, [args.batch_size, None])
-        output = model.model(hparams=hparams, X=context)
+        output = model.model(hparams=hparams, X=context, gradchk=args.memory_saving_gradients)
         loss = tf.reduce_mean(
             tf.nn.sparse_softmax_cross_entropy_with_logits(
                 labels=context[:, 1:], logits=output['logits'][:, :-1]))
 
         if args.val_every > 0:
             val_context = tf.placeholder(tf.int32, [args.val_batch_size, None])
-            val_output = model.model(hparams=hparams, X=val_context)
+            val_output = model.model(hparams=hparams, X=val_context, gradchk=args.memory_saving_gradients)
             val_loss = tf.reduce_mean(
                 tf.nn.sparse_softmax_cross_entropy_with_logits(
                     labels=val_context[:, 1:], logits=val_output['logits'][:, :-1]))
