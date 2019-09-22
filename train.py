@@ -16,7 +16,7 @@ from datetime import datetime
 import model, sample, encoder
 from load_dataset import load_dataset, Sampler
 from accumulate import AccumulatingOptimizer
-from memory_saving_gradients import gradients
+import memory_saving_gradients
 
 from AdafactorOptimizer import AdafactorOptimizer
 
