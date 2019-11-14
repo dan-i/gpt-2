@@ -87,16 +87,16 @@ def attn(x, scope, n_state, *, past, hparams):
     def mask_attn_weights(w):
         # w has shape [batch, heads, dst_sequence, src_sequence], where information flows from src to dst.
         _, _, nd, ns = shape_list(w)
-        b = attention_mask(nd, ns, dtype=w.dtype)
+        b = attention_mask(nd, ns, dtype=tf.float16)  # from w.dtype for rp32
         b = tf.reshape(b, [1, 1, nd, ns])
-        w = w*b - tf.cast(1e10, w.dtype)*(1-b)
+        w = w*b - tf.cast(1e10, tf.float16)*(1-b)  # w.dtype
         return w
 
     def multihead_attn(q, k, v):
         if hparams.sparse==False:
             # q, k, v have shape [batch, heads, sequence, features]
             w = tf.matmul(q, k, transpose_b=True)
-            w = w * tf.rsqrt(tf.cast(v.shape[-1].value, w.dtype))
+            w = w * tf.rsqrt(tf.cast(v.shape[-1].value, tf.float16)) # w.dtype
             w = mask_attn_weights(w)
             w = softmax(w)
             a = tf.matmul(w, v)
